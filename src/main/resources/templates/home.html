@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pt-br" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="datetime-local"], textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .form-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .form-section h2 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div th:if="${msg}"><span th:text="${msg}"></span></div>
+    <div class="Container2 text-center w-100 h-100">
+        <form class="w-100" th:action="@{/}" method="post" enctype="multipart/form-data">
+            <div class="form-section">
+                <h2>Informações do Cliente</h2>
+                <div class="form-group">
+                    <label for="nomeCliente">Nome do Cliente:</label>
+                    <input type="text" id="nomeCliente" name="nomeCliente" required>
+                </div>
+                <div class="form-group">
+                    <label for="solicitante">Solicitante:</label>
+                    <input type="text" id="solicitante" name="solicitante" required>
+                </div>
+                <div class="form-group">
+                    <label for="tipoContato">Tipo de Contato:</label>
+                    <input type="text" id="tipoContato" name="tipoContato" required>
+                </div>
+                <div class="form-group">
+                    <label for="kmInicial">KM Inicial:</label>
+                    <input type="text" id="kmInicial" name="kmInicial" required>
+                </div>
+                <div class="form-group">
+                    <label for="kmFinal">KM Final:</label>
+                    <input type="text" id="kmFinal" name="kmFinal" required>
+                </div>
+                <div class="form-group">
+                    <label for="horaInicial">Hora Inicial:</label>
+                    <input type="datetime-local" id="horaInicial" name="horaInicial" required>
+                </div>
+                <div class="form-group">
+                    <label for="horaFinal">Hora Final:</label>
+                    <input type="datetime-local" id="horaFinal" name="horaFinal" required>
+                </div>
+                <div class="form-group">
+                    <label for="dataHoraSolicitacao">Data e Hora da Solicitação:</label>
+                    <input type="datetime-local" id="dataHoraSolicitacao" name="dataHoraSolicitacao" required>
+                </div>
+            </div>
+
+            <h5 style="margin:10px 0px">Selecione as Imagens</h5>
+            <textarea placeholder="Descrição final" id="descricaoFinal" name="descricaoFinal" style="width: 50%; height:250px;"></textarea>
+            <input type="file" name="arquivo" id="arquivo" accept="image/png, image/jpeg, image/jpg image/gif" class="form-control-file" multiple style="background: none; border:none;border-radius: 0;margin:auto;width:350px;" />
+            <input type="submit"/>
+        </form>
+    </div>
+</body>
+</html>
+
+<script>
+       $("#arquivo").change(function(event){
+            const files = event.target.files;
+            let totalSize =0;
+
+            for(let i=0;i < files.length;i++){
+                totalSize += files[i].size;
+                console.log(i)
+            }
+            totalSize = totalSize / ( 1024 * 1024)
+            if(totalSize > 500){
+                alert("Tamanho maximo suportado para imagens são de 500MB")
+                alert("Tamanho total das imagens selecionadas: " + totalSize.toFixed(2) + " MB");
+                alert("Por favor selecionar as imagens novamente")
+                $("#arquivo").val("")
+            }
+            console.log("Tamanho total:",totalSize.toFixed(2)," MB")
+        });
+</script>
