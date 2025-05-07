@@ -33,10 +33,12 @@ public class GerarPdf {
     public ByteArrayOutputStream getPDF(Ocorrencia ocorrencia, List<Image> listaImg) throws DocumentException {
         DateTimeFormatter date = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        PdfWriter.getInstance(documento, out);
+        PdfWriter writer = PdfWriter.getInstance(documento, out);
+        writer.setFullCompression();
+        writer.setLinearPageMode();
 
-        documento.setPageSize(new Rectangle(595, 842));
-        documento.setMargins(5, 5, 10, 10);
+        documento.setPageSize(PageSize.A4);
+        documento.setMargins(16, 16, 16, 10);
         HeaderFooter header = new HeaderFooter(new Phrase("www.grupogoldensat.com.br\nRua Haiti,129 - Parque das Nações - Santo André\nCEP:09280-390"), true);
         header.setBorder(Rectangle.NO_BORDER);
         header.setAlignment(Element.ALIGN_CENTER);

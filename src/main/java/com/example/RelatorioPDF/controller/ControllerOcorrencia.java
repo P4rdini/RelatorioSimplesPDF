@@ -35,10 +35,8 @@ public class ControllerOcorrencia {
 
     @PostMapping
     public ResponseEntity<byte[]> getRelatorio(HttpServletRequest request, @RequestParam("descricaoFinal") String descricaoFinal, @RequestParam("arquivo") MultipartFile[] imagens,
-                                               @RequestParam("nomeCliente") String nomeCliente, @RequestParam("solicitante") String Solicitante,
-                                               @RequestParam("tipoContato") String tipoContato, @RequestParam("kmInicial") String kmInicial,
-                                               @RequestParam("kmFinal") String kmFinal, @RequestParam("horaInicial")String horaInicial,
-                                               @RequestParam("horaFinal") String horaFinal, @RequestParam("dataHoraSolicitacao") String horaSolicitacao ){
+                                               @RequestParam("horaInicial")String horaInicial,
+                                               @RequestParam("horaFinal") String horaFinal){
         List<Image> lista ;
         if(imagens.length >0){
             for (int i = 0; i < imagens.length; i++) {
@@ -56,10 +54,9 @@ public class ControllerOcorrencia {
         }
         lista = convertMultipartfileToImage(imagens);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        LocalDateTime horaOcorrencia = LocalDateTime.parse(horaSolicitacao, formatter);
         LocalDateTime finalHora = LocalDateTime.parse(horaFinal,formatter);
         LocalDateTime inicialHora = LocalDateTime.parse(horaInicial,formatter);
-        Ocorrencia ocorrencia = new Ocorrencia(nomeCliente,Solicitante,tipoContato,horaOcorrencia,descricaoFinal,inicialHora,finalHora,Long.valueOf(kmInicial),Long.valueOf(kmFinal));
+        Ocorrencia ocorrencia = new Ocorrencia("Fedex","Thomas Santos","WhatsApp",inicialHora,descricaoFinal,inicialHora,finalHora,0,40);
 
 
         return convertPDFtoResponse(lista,ocorrencia);
