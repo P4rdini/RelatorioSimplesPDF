@@ -58,30 +58,44 @@ public class GerarPdf {
         tabelaAtendimento.setWidthPercentage(70);
         String nConsta = "Não Consta";
         String cavalo = nConsta;
-        String modelo= nConsta;
+        String modeloCavalo= nConsta;
         String carreta = nConsta;
+        String modeloCarreta= nConsta;
         String rastreador = nConsta;
         String rastreadorUltimaposicao = nConsta;
         String isca = nConsta;
         String iscaUltimaPosicao = nConsta;
 
-       /* if(ocorrencia.getVeiculo() != null){
-            Veiculo veiculo = ocorrencia.getVeiculo();
+        if(!ocorrencia.getCavalo().getPlaca().isEmpty()) {
 
-            cavalo = veiculo.getCavalo().isEmpty() ? nConsta : veiculo.getCavalo();
+            cavalo = ocorrencia.getCavalo().getPlaca();
 
-            modelo = contruirModelo(veiculo,nConsta);
+            if(!ocorrencia.getCavalo().getModelo().isEmpty()){
+                modeloCavalo=ocorrencia.getCavalo().getModelo();
+            }
+            if(ocorrencia.getCavalo().getAno() != null){
+                modeloCavalo+=" / "+ocorrencia.getCavalo().getAno();
+            }
+            if(!ocorrencia.getCavalo().getCor().isEmpty()){
+                modeloCavalo+=" / "+ ocorrencia.getCavalo().getCor();
+            }
 
-            if(!veiculo.getCarreta().isEmpty()){
-                carreta = veiculo.getCarreta();
+            if (!ocorrencia.getCarreta().getPlaca().isEmpty()) {
+                carreta = ocorrencia.getCarreta().getPlaca();
             }
-            if(veiculo.getIdRastreador() != 0){
-               rastreador = "Golden Sat";
+            if(!ocorrencia.getCarreta().getModelo().isEmpty()){
+                modeloCarreta=ocorrencia.getCarreta().getModelo();
             }
-            if(!veiculo.getEnderecoUltimaPosicao().isEmpty()){
-                rastreadorUltimaposicao = veiculo.getEnderecoUltimaPosicao();
+            if(ocorrencia.getCarreta().getAno() != null){
+                modeloCarreta+=ocorrencia.getCarreta().getAno();
             }
-        }*/
+            if(!ocorrencia.getCarreta().getCor().isEmpty()){
+                modeloCarreta+=ocorrencia.getCarreta().getCor();
+            }
+
+
+
+        }
 
 
        /* if (!ocorrencia.getIscas().isEmpty()) {
@@ -91,7 +105,7 @@ public class GerarPdf {
         createCell(tabela,"Cliente", fontColumnTitle, false);
         createCell(tabela,ocorrencia.getCliente(), fontePadrao, false);
         createCell(tabela,"Ocorrencia", fontColumnTitle, false);
-        createCell(tabela,"Pronta Resposta", fontePadrao, false);
+        createCell(tabela,ocorrencia.getTipoAcionamento(), fontePadrao, false);
 
         createCell(tabela,"Solicitante", fontColumnTitle, true);
         createCell(tabela,ocorrencia.getSolicitante(), fontePadrao, true);
@@ -99,30 +113,30 @@ public class GerarPdf {
         createCell(tabela,ocorrencia.getTipoContato(), fontePadrao, true);
 
         createCell(tabela,"Data/Hora", fontColumnTitle, false);
-        createCell(tabela,date.format(ocorrencia.getHoraOcorrencia()), fontePadrao, false);
+        createCell(tabela,date.format(ocorrencia.getHoraInicial()), fontePadrao, false);
         createCell(tabela,"Operador", fontColumnTitle, false);
         createCell(tabela,"Rafael", fontePadrao, false);
 
-       // List<String> listaServico = ocorrencia.getServicoEfetuado().stream().map(n -> n.getServico()).toList();
-      //  listaServico = listaServico.stream().distinct().toList();
-
         createCell(tabela,"Tipo", fontColumnTitle, true);
-        createCell(tabela,"Preservação", fontePadrao, true);
+        createCell(tabela,ocorrencia.getTipoAcionamento(), fontePadrao, true);
         createCell(tabela,"Qtd de Agente", fontColumnTitle, true);
-        createCell(tabela,"1", fontePadrao, true);
+        createCell(tabela,String.valueOf(ocorrencia.getQtdAgente()), fontePadrao, true);
 
-        createTitle(tabela, "Dados do Veiculo", false);
-        createCell(tabela,"Placa:", fontColumnTitle, true);
-        createCell(tabela,nConsta, fontePadrao, true);
-        createCell(tabela,"Modelo/Cor/Ano", fontColumnTitle, true);
-        createCell(tabela,nConsta, fontePadrao, true);
+        if(!cavalo.equals(nConsta) && !carreta.equals(nConsta)){
+            createTitle(tabela, "Dados do Veiculo", false);
+            createCell(tabela,"Placa:", fontColumnTitle, true);
+            createCell(tabela,cavalo, fontePadrao, true);
+            createCell(tabela,"Modelo/Cor/Ano", fontColumnTitle, true);
+            createCell(tabela,modeloCavalo, fontePadrao, true);
 
-        createCell(tabela,"Carreta:", fontColumnTitle, false);
-        createCell(tabela,nConsta, fontePadrao, false);
-        createCell(tabela,nConsta, fontColumnTitle, false);
-        createCell(tabela,nConsta, fontePadrao, false);
+            createCell(tabela,"Carreta:", fontColumnTitle, false);
+            createCell(tabela,carreta, fontePadrao, false);
+            createCell(tabela,"Modelo/Cor/Ano", fontColumnTitle, false);
+            createCell(tabela,modeloCarreta, fontePadrao, false);
+        }
 
-        createCell(tabela,"Rastreador:", fontColumnTitle, true);
+
+       /* createCell(tabela,"Rastreador:", fontColumnTitle, true);
         createCell(tabela,nConsta, fontePadrao, true);
         createCell(tabela,"Última posição", fontColumnTitle, true);
         createCell(tabela,nConsta, fontePadrao, true);
@@ -130,11 +144,11 @@ public class GerarPdf {
         createCell(tabela,"Isca:", fontColumnTitle, false);
         createCell(tabela,nConsta, fontePadrao, false);
         createCell(tabela,"Última posição", fontColumnTitle, false);
-        createCell(tabela,nConsta, fontePadrao, false);
+        createCell(tabela,nConsta, fontePadrao, false);*/
 
-        createTitle(tabela, "Detalhes da Ocorrência / Detalhes Adicionais", true);
+        createTitle(tabela, "Detalhes da Ocorrência", true);
 
-        PdfPCell cell = new PdfPCell(new Phrase(new Chunk(ocorrencia.getDescrição(), fontePadrao)));
+        PdfPCell cell = new PdfPCell(new Phrase(new Chunk(ocorrencia.getDescricao(), fontePadrao)));
         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
         cell.setBorderColor(Color.gray);
         cell.setPaddingLeft(5);

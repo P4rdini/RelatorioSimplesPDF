@@ -11,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -34,9 +31,7 @@ public class ControllerOcorrencia {
 
 
     @PostMapping
-    public ResponseEntity<byte[]> getRelatorio(HttpServletRequest request, @RequestParam("descricaoFinal") String descricaoFinal, @RequestParam("arquivo") MultipartFile[] imagens,
-                                               @RequestParam("horaInicial")String horaInicial,
-                                               @RequestParam("horaFinal") String horaFinal){
+    public ResponseEntity<byte[]> getRelatorio(HttpServletRequest request, @ModelAttribute Ocorrencia ocorrencia, @RequestParam("arquivo") MultipartFile[] imagens){
         List<Image> lista ;
         if(imagens.length >0){
             for (int i = 0; i < imagens.length; i++) {
@@ -54,10 +49,10 @@ public class ControllerOcorrencia {
         }
         lista = convertMultipartfileToImage(imagens);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        LocalDateTime finalHora = LocalDateTime.parse(horaFinal,formatter);
-        LocalDateTime inicialHora = LocalDateTime.parse(horaInicial,formatter);
-        Ocorrencia ocorrencia = new Ocorrencia("Fedex","Thomas Santos","WhatsApp",inicialHora,descricaoFinal,inicialHora,finalHora,0,40);
-
+        LocalDateTime finalHora = LocalDateTime.parse(ocorrencia.getHoraFinal().toString(),formatter);
+        LocalDateTime inicialHora = LocalDateTime.parse(ocorrencia.getHoraInicial().toString(),formatter);
+       // Ocorrencia ocorrencia2 = new Ocorrencia(ocorrencia.getCliente(),ocorrencia.getSolicitante(),ocorrencia.getTipoContato(),ocorrencia.getTipoAcionamento(),inicialHora,ocorrencia.getDescrição(),inicialHora,finalHora,ocorrencia.getKmInicial(),ocorrencia.getKmFinal());
+        System.out.println(ocorrencia.toString());
 
         return convertPDFtoResponse(lista,ocorrencia);
     }
