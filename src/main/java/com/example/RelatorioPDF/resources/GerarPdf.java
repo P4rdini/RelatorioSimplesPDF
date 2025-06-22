@@ -122,19 +122,20 @@ public class GerarPdf {
         createCell(tabela,"Qtd de Agente", fontColumnTitle, true);
         createCell(tabela,String.valueOf(ocorrencia.getQtdAgente()), fontePadrao, true);
 
-        if(!cavalo.equals(nConsta) && !carreta.equals(nConsta)){
+        if(!cavalo.equals(nConsta)){
             createTitle(tabela, "Dados do Veiculo", false);
             createCell(tabela,"Placa:", fontColumnTitle, true);
             createCell(tabela,cavalo, fontePadrao, true);
             createCell(tabela,"Modelo/Cor/Ano", fontColumnTitle, true);
             createCell(tabela,modeloCavalo, fontePadrao, true);
 
+        }
+        if(!carreta.equals(nConsta)){
             createCell(tabela,"Carreta:", fontColumnTitle, false);
             createCell(tabela,carreta, fontePadrao, false);
             createCell(tabela,"Modelo/Cor/Ano", fontColumnTitle, false);
             createCell(tabela,modeloCarreta, fontePadrao, false);
         }
-
 
        /* createCell(tabela,"Rastreador:", fontColumnTitle, true);
         createCell(tabela,nConsta, fontePadrao, true);
