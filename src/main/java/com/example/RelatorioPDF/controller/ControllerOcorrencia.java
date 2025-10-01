@@ -76,7 +76,9 @@ public class ControllerOcorrencia {
     }
 
     public List<Image> convertMultipartfileToImage(MultipartFile[] files){
+        
         List<Image> lista = new ArrayList<>();
+        Arrays.sort(files,Comparator.comparing(MultipartFile::getOriginalFilename));
         for(int i=0;i< files.length;i++){
             if(!files[i].isEmpty()){
                 try {
